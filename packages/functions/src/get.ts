@@ -1,26 +1,29 @@
 import { Resource } from "sst";
 import { Util } from "@notes/core/util";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { QueryCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { GetCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = Util.handler(async (event) => {
   const params = {
     TableName: Resource.Notes.name,
-    // 'KeyConditionExpression' defines the condition for the query
-    // - 'userId = :userId': only return items with matching 'userId'
-    //   partition key
-    KeyConditionExpression: "userId = :userId",
-    // 'ExpressionAttributeValues' defines the value in the condition
-    // - ':userId': defines 'userId' to be the id of the author
-    ExpressionAttributeValues: {
-      ":userId": "123",
+    // 'Key' defines the partition key and sort key of
+    // the item to be retrieved
+    Key: {
+      userId: "123", // The id of the author
+      noteId: event?.pathParameters?.id, // The id of the note from the path
     },
   };
 
-  const result = await dynamoDb.send(new QueryCommand(params));
+  const result = await dynamoDb.send(new GetCommand(params));
+  if (!result.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ error: "Item not found." }),
+    };
+  }
 
-  // Return the matching list of items in response body
-  return JSON.stringify(result.Items);
+  // Return the retrieved item
+  return JSON.stringify(result.Item);
 });
