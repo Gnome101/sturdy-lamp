@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.677.0",
     "@aws-sdk/lib-dynamodb": "^3.677.0",
-    "sst": "^3"
+    "sst": "^3",
+    "stripe": "^17.2.1"
   }
 }

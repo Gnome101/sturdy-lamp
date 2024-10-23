@@ -6,6 +6,7 @@
     "@aws-sdk/lib-dynamodb": "^3.677.0",
     "@monorepo-template/core": "*",
     "sst": "*",
+    "stripe": "^17.2.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
