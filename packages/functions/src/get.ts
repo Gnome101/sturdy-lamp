@@ -6,6 +6,7 @@ import { GetCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const main = Util.handler(async (event) => {
+  console.log("hi");
   const params = {
     TableName: Resource.Notes.name,
     // 'Key' defines the partition key and sort key of
